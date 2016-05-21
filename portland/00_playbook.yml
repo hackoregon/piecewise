@@ -1,0 +1,14 @@
+---
+#
+# Piecewise Portland Playbook
+#  - This will need to be updated manually as the main project changes
+#  - Portland's Vagrant file should use this as an ansible entrypoint instead
+#    of the main playbook.yml.
+#
+- hosts: all
+  tasks:
+    - include: 01_system_tasks.yml
+      sudo: True
+    - include: 02_user_tasks.yml
+    - include: 03_portland_tasks.yml
+      sudo: True

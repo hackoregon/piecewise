@@ -1,7 +1,8 @@
 ---
-- name: Update apt database
+- name: "Packages: Update apt database"
   apt: update_cache=yes
-- name: Install packages
+
+- name: "Packages: Install"
   apt: name={{ item }} state=latest
   with_items:
     - postgresql
@@ -15,46 +16,65 @@
     - python-dev
     - gdal-bin
     - unzip
-- name: Fetch telescope
+    - vim
+    - ansible
+
+- name: "Telescope: Git Clone"
   git: repo=https://github.com/m-lab/telescope.git
        dest=/opt/telescope/
-- name: Get latest MaxMind CSV
+
+- name: "MaxMind: Get latest CSV"
   get_url: url=http://download.maxmind.com/download/geoip/database/asnum/GeoIPASNum2.zip
            dest=/tmp/GeoIPASNum2.zip
-- name: Unzip MaxMind CSV
+
+- name: "MaxMind: Unzip CSV"
   unarchive: src=/tmp/GeoIPASNum2.zip
              dest=/tmp/
              creates=/tmp/GeoIPASNum2.csv
              copy=no
-- name: Fetch piecewise
-  git: repo=https://github.com/opentechinstitute/piecewise.git
-       dest=/opt/piecewise.git/
-       version=master
 
-- name: Deploy piecewise
+- name: "Piecewise: Git Clone"
+  git: repo=https://github.com/hackoregon/broadbandmap-piecewise.git
+       dest=/opt/piecewise.git/
+       version=portland
+
+- name: "Piecewise: Deploy"
   file: src=/opt/piecewise.git/{{ item.src }} dest=/opt/{{ item.dest }} state=link
   with_items:
       - { src: piecewise, dest: piecewise }
       - { src: piecewise_web, dest: piecewise_web }
       - { src: collector, dest: collector }
-- name: Install required python modules
+
+- name: "Python: modules from requirements.txt"
   pip: requirements={{ item }} state=latest
   with_items:
     - /opt/telescope/requirements.txt
     - /opt/piecewise/requirements.txt
-- name: Create piecewise log directory
+
+- name: "Piecewise: Create log directory"
   file: path=/var/log/piecewise/ state=directory
-- name: Install convenience python modules
+
+- name: "Python: Install convenience modules"
   pip: name=bigquery state=latest
-- name: Deploy configuration files
-  copy: src=conf/ dest=/ owner=root group=root
-- name: Fix postgres configuration permissions
+
+- name: "Conf: deploy default project configuration files"
+  copy: src=../conf/ dest=/ owner=root group=root
+
+- name: "Conf: Fix postgres configuration permissions"
   file: path=/etc/postgresql/9.4/main/pg_hba.conf state=file owner=postgres group=postgres mode=0640
-- name: Restart services
+
+- name: "Conf: Fix postgresql.conf configuration permissions"
+  file: path=/etc/postgresql/9.4/main/postgresql.conf state=file owner=postgres group=postgres mode=0640
+
+- name: "Restart: uwsgi, nginx, postgresql"
   service: name={{ item }} state=restarted
   with_items: 
     - uwsgi
     - nginx
     - postgresql
-- postgresql_db: name=piecewise state=present
-- command: psql -U postgres -d piecewise -f /opt/piecewise/setup.sql
+
+- name: "Postgresql: Create piecewise database"
+  postgresql_db: name=piecewise state=present
+
+- name: "Postgresql: Import setup.sql"
+  command: psql -U postgres -d piecewise -f /opt/piecewise/setup.sql

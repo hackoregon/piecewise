@@ -1,0 +1,37 @@
+---
+#
+# Install Packages
+#
+- name: "Packages: ..."
+  pip: name=ipaddress state=latest
+
+#
+# Piecewise Web
+#
+- name: "Piecewise Web: Copy Portland data and customziations"
+  copy: src=piecewise_web/ dest=/opt/piecewise_web/
+
+#
+# Piecewise
+#
+- name: "Piecewise: Copy Portland configurations"
+  copy: src=piecewise/ dest=/opt/piecewise/
+
+- name: "Piecewise: Install etc configs"
+  copy: src=etc/ dest=/etc/
+
+#
+# Extract, Transform, Load
+#
+- name: "Postgres: Ingest census blocks"
+  command: ogr2ogr -f PostgreSQL -t_srs EPSG:4326 -nln portland_blkgrps -nlt MultiPolygon 'PG:user=postgres dbname=piecewise' /opt/piecewise_web/portland_blkgrps/portland_blockgroups2010.shp
+
+- name: "Piecewise: Restart uwsgi so piecewise config is detected"
+  service: name=uwsgi state=restarted
+
+- name: "Piecewise: Load extra_data.py"
+  command: python extra_data.py chdir=/opt/piecewise
+
+- name: "Postgres: Load example results table"
+  shell: gunzip -c /opt/piecewise.git/portland/portland_bigquery_results.sql.gz | psql -U postgres piecewise
+  when: piecewise_env == "dev"

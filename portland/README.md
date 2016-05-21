@@ -51,4 +51,18 @@ Please see ```portland_tasks.yml``` for specifics.
 
 * Put center.js where bq2geojson can find it
     * $ cd /opt/piecewise
-    * $ python portland_example/portland_center.py /opt/bq2geojson/html/js/center.js
+    * $ python portland/portland_center.py /opt/bq2geojson/html/js/center.js
+
+## Updating a Deployed Server
+
+This will work for Vagrant or a deployed system like EC2
+
+```
+cd /opt/piecewise.git
+git fetch origin
+git pull origin HEAD
+ansible-playbook -i "localhost," -c local playbook.yml
+```
+
+This will bring the git repository current with the remote; then run the ansible
+playbook again to update the system.
