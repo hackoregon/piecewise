@@ -5,3 +5,4 @@
 *.retry
 .DS_Store
 credentials.txt
+portland/piecewise/client_secrets.json
