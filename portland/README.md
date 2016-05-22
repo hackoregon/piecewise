@@ -64,5 +64,12 @@ git pull origin HEAD
 ansible-playbook -i "localhost," -c local playbook.yml
 ```
 
+If you are only using Vagrant running:
+
+```
+vagrant provision
+```
+should now work to update your deployment.
+
 This will bring the git repository current with the remote; then run the ansible
 playbook again to update the system.
