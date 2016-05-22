@@ -22,6 +22,7 @@
 - name: "Telescope: Git Clone"
   git: repo=https://github.com/m-lab/telescope.git
        dest=/opt/telescope/
+       force=yes
 
 - name: "MaxMind: Get latest CSV"
   get_url: url=http://download.maxmind.com/download/geoip/database/asnum/GeoIPASNum2.zip
@@ -60,7 +61,7 @@
   pip: name=bigquery state=latest
 
 - name: "Conf: deploy default project configuration files"
-  copy: src=../conf/ dest=/ owner=root group=root
+  copy: src=../conf/ dest=/ owner=root group=root force=yes
 
 - name: "Conf: Fix postgres configuration permissions"
   file: path=/etc/postgresql/9.4/main/pg_hba.conf state=file owner=postgres group=postgres mode=0640

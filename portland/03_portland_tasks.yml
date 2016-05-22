@@ -9,16 +9,16 @@
 # Piecewise Web
 #
 - name: "Piecewise Web: Copy Portland data and customziations"
-  copy: src=piecewise_web/ dest=/opt/piecewise_web/
+  copy: src=piecewise_web/ dest=/opt/piecewise_web/ force=yes
 
 #
 # Piecewise
 #
 - name: "Piecewise: Copy Portland configurations"
-  copy: src=piecewise/ dest=/opt/piecewise/
+  copy: src=piecewise/ dest=/opt/piecewise/ force=yes
 
 - name: "Piecewise: Install etc configs"
-  copy: src=etc/ dest=/etc/
+  copy: src=etc/ dest=/etc/ force=yes
 
 #
 # Extract, Transform, Load
