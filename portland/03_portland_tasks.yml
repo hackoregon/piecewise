@@ -24,7 +24,7 @@
 # Extract, Transform, Load
 #
 - name: "Postgres: Ingest census blocks"
-  command: ogr2ogr -f PostgreSQL -t_srs EPSG:4326 -nln portland_blkgrps -nlt MultiPolygon 'PG:user=postgres dbname=piecewise' /opt/piecewise_web/portland_blkgrps/portland_blockgroups2010.shp
+  command: ogr2ogr -f PostgreSQL -t_srs EPSG:4326 -nln portland_blkgrps -nlt MultiPolygon 'PG:user=postgres dbname=piecewise' /opt/piecewise_web/portland_blkgrps/portland_blockgroups2010.shp -overwrite
 
 - name: "Piecewise: Restart uwsgi so piecewise config is detected"
   service: name=uwsgi state=restarted
