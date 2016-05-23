@@ -6,6 +6,8 @@
 #    of the main playbook.yml.
 #
 - hosts: all
+  vars:
+    piecewise_env: "live"
   tasks:
     - include: 01_system_tasks.yml
       sudo: True
