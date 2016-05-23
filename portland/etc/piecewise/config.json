@@ -47,7 +47,7 @@
     }],
     "filters": [
         { "type": "temporal", "after": "Jan 1 2014 00:00:00", "before" : "Jan 1 2050 00:00:00" },
-        { "type": "bbox", "bbox": [-122.30,45.25,-123.25,45.76] },
+        { "type": "bbox", "bbox": [45.76,-123.25,45.25,-122.30] },
         { "type": "raw", "query": "connection_spec.data_direction IS NOT NULL" },
         { "type": "raw", "query": "(web100_log_entry.snap.HCThruOctetsAcked >= 8192 OR web100_log_entry.snap.HCThruOctetsReceived >= 8192)" },
         { "type": "raw", "query": "(web100_log_entry.snap.State == 1 OR (web100_log_entry.snap.State >= 5 AND web100_log_entry.snap.State <= 11))" },
