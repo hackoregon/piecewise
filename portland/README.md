@@ -1,4 +1,6 @@
-# Portland Example
+# Portland Oregon
+
+Portland efforts by http://hackoregon.org.
 
 This directory contains the customizations and settings required to deploy the 
 broadband test site for Portland, Oregon.
@@ -39,37 +41,58 @@ At this point we would need to test everything and once verified we would be fre
 to fix the branches that need cherry-picking and to create new feature branches to
 continue work.
 
-## Ansible Tasks Specific to Portland
+## Google Developer Console
+
+UPDATEME
+
+## M-Labs
+
+UPDATEME
+
+## Portland Specific Customizations
+
+UPDATEME
+
+## Deploying Portland Site With Ansible
+
+We have created a copy of all the ansible tasks for the project starting with
+```00_playbook.yml```.  We'll refine as we go.  We'll need to pay attention to
+changes in upstream.
+
+Please see ```03_portland_tasks.yml``` for Portland specifics.  We are attempting to 
+organize the files in a way that we can just deploy the entire directories over the 
+top of the main project files for a "Portland" deployment.
+
+portland/piecewise/client_secrets.json must be manually placed in the repo prior to
+deployment.
 
 These things need to be done on the server after Ansible has deployed the site.
 
-Please see ```portland_tasks.yml``` for specifics.
-
 * Ingest bigquery data and aggregate it
-    * $ cd /opt/piecewise
-    * $ sudo python -m piecewise.ingest
-
-* Put center.js where bq2geojson can find it
-    * $ cd /opt/piecewise
-    * $ python portland/portland_center.py /opt/bq2geojson/html/js/center.js
+    * ```$ cd /opt/piecewise```
+    * ```$ sudo python -m piecewise.ingest```
+* Check log file for errors...
+    * ```$ tail -200f /var/log/piecewise/uwsgi.log```
 
 ## Updating a Deployed Server
 
 This will work for Vagrant or a deployed system like EC2
 
+SSH into the server and su to the root user or a user who can sudo
+(e.g. the 'vagrant' user is just fine).
+
 ```
 cd /opt/piecewise.git
-git fetch origin
-git pull origin HEAD
-ansible-playbook -i "localhost," -c local playbook.yml
+sudo git fetch origin
+sudo git pull origin HEAD
+sudo ansible-playbook -i "localhost," -c local portland/00_playbook.yml
 ```
 
-If you are only using Vagrant running:
+If you are only using Vagrant locally you should be able to update the install with...
 
 ```
 vagrant provision
 ```
-should now work to update your deployment.
 
 This will bring the git repository current with the remote; then run the ansible
 playbook again to update the system.
