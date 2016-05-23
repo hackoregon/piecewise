@@ -3,7 +3,7 @@
     "database_uri" : "postgresql+psycopg2://postgres:@/piecewise",
     "cache_table_name": "results",
     "aggregations": [{
-        "name": "by_census_block",
+        "name": "by_blkgrp",
         "statistics_table_name": "block_statistics",
         "bins": [
             { "type" : "spatial_join", "table" : "portland_blckgrps", "geometry_column" : "wkb_geometry", "key" : "objectid", "join_custom_data" : true },
