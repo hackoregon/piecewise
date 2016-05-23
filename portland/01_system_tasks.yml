@@ -37,7 +37,7 @@
 - name: "Piecewise: Git Clone"
   git: repo=https://github.com/hackoregon/broadbandmap-piecewise.git
        dest=/opt/piecewise.git/
-       version=portland
+       version=portland_jzimm
        force=yes
        update=yes
 
