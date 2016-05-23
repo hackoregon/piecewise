@@ -5,4 +5,5 @@
 *.retry
 .DS_Store
 credentials.txt
-portland/piecewise/client_secrets.json
+client_secrets.json
+bigquery_credentials.dat
